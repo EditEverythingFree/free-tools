@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>PDF to Word Converter</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.7.107/pdf.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+  <style>
+    body { font-family: Arial; text-align: center; padding: 20px; }
+    #output { margin-top: 20px; }
+  </style>
+</head>
+<body>
+
+<h1>PDF to Word Converter</h1>
+<p>Upload your PDF file to convert it to Word:</p>
+<input type="file" id="pdf-upload" accept="application/pdf">
+<br><br>
+<button id="convert-btn">Convert PDF to Word</button>
+
+<div id="output"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/docx/7.0.2/docx.min.js"></script>
+<script>
+const uploadInput = document.getElementById('pdf-upload');
+const convertBtn = document.getElementById('convert-btn');
+
+convertBtn.addEventListener('click', async () => {
+  const file = uploadInput.files[0];
+  if (!file) {
+    alert('Please upload a PDF first!');
+    return;
+  }
+
+  const arrayBuffer = await file.arrayBuffer();
+  const pdf = await pdfjsLib.getDocument({data: arrayBuffer}).promise;
+
+  let fullText = '';
+
+  for (let i = 1; i <= pdf.numPages; i++) {
+    const page = await pdf.getPage(i);
+    const textContent = await page.getTextContent();
+    const pageText = textContent.items.map(item => item.str).join(' ');
+    fullText += pageText + '\n\n';
+  }
+
+  // Create Word document
+  const { Document, Packer, Paragraph, TextRun } = docx;
+  const doc = new Document();
+  doc.addSection({
+    properties: {},
+    children: [new Paragraph(fullText)]
+  });
+
+  const blob = await Packer.toBlob(doc);
+  saveAs(blob, file.name.replace('.pdf', '.docx'));
+});
+</script>
+
+</body>
+</html>
