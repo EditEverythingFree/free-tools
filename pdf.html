@@ -2,66 +2,32 @@
 <html>
 <head>
   <title>PDF to Word Converter</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- PDF.js -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.7.107/pdf.min.js"></script>
+  <!-- Google AdSense script -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4837666912714221"
+     crossorigin="anonymous"></script>
 
-  <!-- FileSaver.js -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
-
-  <!-- docx.js -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/docx/7.0.2/docx.umd.js"></script>
-
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    body { font-family: 'Poppins', sans-serif; text-align: center; padding: 20px; background:#f4f4f4; }
-    h1 { color: #1e3c72; }
-    input, button { padding: 10px; margin: 10px; font-size: 16px; }
-    button { background:#1e3c72; color:white; border:none; border-radius:5px; cursor:pointer; }
-    button:hover { background:#16325c; }
+    body{font-family:'Poppins',sans-serif;margin:0;padding:20px;text-align:center;background:#f0f4f8;}
+    h1{color:#1e3c72;}
+    .ad-block{margin:20px auto;}
   </style>
 </head>
 <body>
+<h1>PDF to Word Converter</h1>
+<p>Tool coming soon or integrate your converter here.</p>
 
-<h1>📄 PDF to Word Converter</h1>
-<p>Upload your PDF file and download it as a Word document.</p>
-
-<input type="file" id="pdf-upload" accept="application/pdf"><br>
-<button id="convert-btn">Convert PDF to Word</button>
-
-<script>
-const uploadInput = document.getElementById('pdf-upload');
-const convertBtn = document.getElementById('convert-btn');
-
-convertBtn.addEventListener('click', async () => {
-  const file = uploadInput.files[0];
-  if(!file){ alert('Please upload a PDF!'); return; }
-
-  const arrayBuffer = await file.arrayBuffer();
-
-  // Load PDF
-  const pdf = await pdfjsLib.getDocument({data: arrayBuffer}).promise;
-
-  let fullText = '';
-  for(let i=1; i<=pdf.numPages; i++){
-    const page = await pdf.getPage(i);
-    const textContent = await page.getTextContent();
-    const pageText = textContent.items.map(item => item.str).join(' ');
-    fullText += pageText + '\n\n';
-  }
-
-  // Create Word document
-  const { Document, Packer, Paragraph } = window.docx;
-  const doc = new Document();
-  doc.addSection({ children: [new Paragraph(fullText)] });
-
-  // Save Word file
-  const blob = await Packer.toBlob(doc);
-  saveAs(blob, file.name.replace('.pdf','.docx'));
-
-  alert('✅ PDF converted! Check your downloads.');
-});
-</script>
-
+<!-- AdSense block -->
+<div class="ad-block">
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-4837666912714221"
+     data-ad-slot="1234567890"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+</div>
 </body>
 </html>
-
