@@ -2,9 +2,16 @@
 <html>
 <head>
   <title>PDF to Word Converter</title>
+
+  <!-- PDF.js -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.7.107/pdf.min.js"></script>
+
+  <!-- FileSaver.js -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/docx/7.0.2/docx.min.js"></script>
+
+  <!-- docx.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/docx/7.0.2/docx.umd.js"></script>
+
   <style>
     body { font-family: 'Poppins', sans-serif; text-align: center; padding: 20px; background:#f4f4f4; }
     h1 { color: #1e3c72; }
@@ -30,6 +37,8 @@ convertBtn.addEventListener('click', async () => {
   if(!file){ alert('Please upload a PDF!'); return; }
 
   const arrayBuffer = await file.arrayBuffer();
+
+  // Load PDF
   const pdf = await pdfjsLib.getDocument({data: arrayBuffer}).promise;
 
   let fullText = '';
@@ -40,13 +49,16 @@ convertBtn.addEventListener('click', async () => {
     fullText += pageText + '\n\n';
   }
 
-  const { Document, Packer, Paragraph } = docx;
+  // Create Word document
+  const { Document, Packer, Paragraph } = window.docx;
   const doc = new Document();
   doc.addSection({ children: [new Paragraph(fullText)] });
 
+  // Save Word file
   const blob = await Packer.toBlob(doc);
   saveAs(blob, file.name.replace('.pdf','.docx'));
-  alert('PDF converted! Check your downloads.');
+
+  alert('✅ PDF converted! Check your downloads.');
 });
 </script>
 
