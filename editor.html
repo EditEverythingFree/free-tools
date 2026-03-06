@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Screenshot Editor</title>
+  <link rel="stylesheet" href="https://uicdn.toast.com/tui-image-editor/latest/tui-image-editor.min.css">
+  <style>
+    body { font-family: Arial; text-align: center; padding: 20px; }
+    #tui-image-editor-container { margin: 0 auto; }
+  </style>
+</head>
+<body>
+<h1>Screenshot Editor</h1>
+<p>Upload an image and edit it!</p>
+<input type="file" id="upload-image"><br><br>
+<div id="tui-image-editor-container" style="width:800px; height:500px;"></div>
+
+<script src="https://uicdn.toast.com/tui-image-editor/latest/tui-image-editor.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/4.6.0/fabric.min.js"></script>
+
+<script>
+const imageEditor = new tui.ImageEditor('#tui-image-editor-container', {
+  includeUI: {
+    loadImage: { path: '', name: 'SampleImage' },
+    menu: ['crop', 'flip', 'rotate', 'draw', 'shape', 'text', 'filter'],
+    initMenu: '',
+    uiSize: { width: '800px', height: '500px' },
+    menuBarPosition: 'bottom'
+  },
+  cssMaxWidth: 800,
+  cssMaxHeight: 500
+});
+
+document.getElementById('upload-image').addEventListener('change', function(e){
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(event){
+    imageEditor.loadImageFromURL(event.target.result, file.name);
+  };
+  reader.readAsDataURL(file);
+});
+</script>
+</body>
+</html>
